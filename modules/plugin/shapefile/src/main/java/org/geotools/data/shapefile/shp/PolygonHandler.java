@@ -303,7 +303,8 @@ public class PolygonHandler implements ShapeHandler {
                     cs.setOrdinate(t, CoordinateSequence.Z, ordinates[t]);
                 }
             }
-            if (shapeType == ShapeType.POLYGONM || shapeType == ShapeType.POLYGONZ) { // Handle M
+            if ((shapeType == ShapeType.POLYGONM || shapeType == ShapeType.POLYGONZ)
+                    && dbuffer.hasRemaining()) { // Handle M
                 dbuffer.position(dbuffer.position() + 2);
                 dbuffer.get(ordinates, 0, numPoints);
 
