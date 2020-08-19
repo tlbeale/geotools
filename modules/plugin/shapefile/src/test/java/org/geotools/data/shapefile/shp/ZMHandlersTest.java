@@ -102,7 +102,7 @@ public class ZMHandlersTest {
 
     @Test
     public void testReadZMultiPoints() throws ShapefileException, IOException {
-        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/zmmultipoints.shp");
+        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/zmultipoints.shp");
         ShapefileDataStore store = new ShapefileDataStore(url);
         SimpleFeature feature = DataUtilities.first(store.getFeatureSource().getFeatures());
         MultiPoint geom = (MultiPoint) feature.getDefaultGeometry();
@@ -115,7 +115,7 @@ public class ZMHandlersTest {
 
     @Test
     public void testReadMMultiPoints() throws ShapefileException, IOException {
-        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/zmmultipoints.shp");
+        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/mmultipoints.shp");
         ShapefileDataStore store = new ShapefileDataStore(url);
         SimpleFeature feature = DataUtilities.first(store.getFeatureSource().getFeatures());
         MultiPoint geom = (MultiPoint) feature.getDefaultGeometry();
@@ -123,7 +123,7 @@ public class ZMHandlersTest {
 
         assertEquals("wrong x", 1208.5983, coordinate.getX(), 0.001);
         assertEquals("wrong y", 924.8555, coordinate.getY(), 0.001);
-        assertEquals("wrong m", 10, coordinate.getM(), 0.00001);
+        assertEquals("wrong m", 20, coordinate.getM(), 0.00001);
     }
 
     @Test
