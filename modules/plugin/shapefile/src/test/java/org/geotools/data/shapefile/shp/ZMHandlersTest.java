@@ -270,6 +270,54 @@ public class ZMHandlersTest {
         assertEquals("wrong num features", 2, readFlatFeatures("mzvalues/zmmultipoints.shp"));
     }
 
+    /**
+     * Checks we can read all the features in the given shapefile as regular (3D) geometry.
+     *
+     * @returns the total number of features read
+     */
+    private int readAllFeatures(String filename) throws IOException {
+        int numFeatures = 0;
+        URL url = TestData.url(ShapefileDataStore.class, filename);
+        ShapefileDataStore store = new ShapefileDataStore(url);
+        Query q = new Query(store.getTypeNames()[0]);
+        FeatureReader<SimpleFeatureType, SimpleFeature> reader =
+                store.getFeatureReader(q, Transaction.AUTO_COMMIT);
+        while (reader.hasNext()) {
+            SimpleFeature f = reader.next();
+            assertNotNull(f.getDefaultGeometry());
+            numFeatures++;
+        }
+        return numFeatures;
+    }
+
+    @Test
+    public void testReadAllLines() throws IOException {
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/mzlines.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/mlines.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/zlines.shp"));
+    }
+
+    @Test
+    public void testReadAllPolygons() throws IOException {
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/mzpolygons.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/mpolygons.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/zpolygons.shp"));
+    }
+
+    @Test
+    public void testReadAllPoints() throws IOException {
+        assertEquals("wrong num features", 99, readAllFeatures("mzvalues/zmpoints.shp"));
+        assertEquals("wrong num features", 99, readAllFeatures("mzvalues/mpoints.shp"));
+        assertEquals("wrong num features", 1, readAllFeatures("mzvalues/pointZ.shp"));
+    }
+
+    @Test
+    public void testReadAllMultiPoints() throws IOException {
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/zmmultipoints.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/mmultipoints.shp"));
+        assertEquals("wrong num features", 2, readAllFeatures("mzvalues/zmultipoints.shp"));
+    }
+
     @Test
     public void testReadMZPolygon() throws ShapefileException, IOException {
         URL url = TestData.url(ShapefileDataStore.class, "mzvalues/mzpolygons.shp");
