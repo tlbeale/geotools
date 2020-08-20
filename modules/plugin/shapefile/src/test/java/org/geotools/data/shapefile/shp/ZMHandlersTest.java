@@ -228,10 +228,14 @@ public class ZMHandlersTest {
         }
     }
 
-    @Test
-    public void testReadFlatLines() throws IOException {
-        // can we read the tazmania_roads shapefile as a flat geometry set.
-        URL url = TestData.url(ShapefileDataStore.class, "taz_shapes/tasmania_roads.shp");
+    /**
+     * Checks we can read all the features in the given shapefile as a flat geometry set.
+     *
+     * @returns the total number of features read
+     */
+    private int readFlatFeatures(String filename) throws IOException {
+        int numFeatures = 0;
+        URL url = TestData.url(ShapefileDataStore.class, filename);
         ShapefileDataStore store = new ShapefileDataStore(url);
         Query q = new Query(store.getTypeNames()[0]);
         q.getHints().put(Hints.FEATURE_2D, Boolean.TRUE);
@@ -240,53 +244,30 @@ public class ZMHandlersTest {
         while (reader.hasNext()) {
             SimpleFeature f = reader.next();
             assertNotNull(f.getDefaultGeometry());
+            numFeatures++;
         }
+        return numFeatures;
+    }
+
+    @Test
+    public void testReadFlatLines() throws IOException {
+        // can we read the tazmania_roads shapefile as a flat geometry set.
+        assertEquals("wrong num features", 14, readFlatFeatures("taz_shapes/tasmania_roads.shp"));
     }
 
     @Test
     public void testReadFlatPolygons() throws IOException {
-        // can we read the tazmania_roads shapefile as a flat geometry set.
-        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/mzpolygons.shp");
-        ShapefileDataStore store = new ShapefileDataStore(url);
-        Query q = new Query(store.getTypeNames()[0]);
-        q.getHints().put(Hints.FEATURE_2D, Boolean.TRUE);
-        FeatureReader<SimpleFeatureType, SimpleFeature> reader =
-                store.getFeatureReader(q, Transaction.AUTO_COMMIT);
-        while (reader.hasNext()) {
-            SimpleFeature f = reader.next();
-            assertNotNull(f.getDefaultGeometry());
-        }
+        assertEquals("wrong num features", 2, readFlatFeatures("mzvalues/mzpolygons.shp"));
     }
 
     @Test
     public void testReadFlatPoints() throws IOException {
-        // can we read the tazmania_roads shapefile as a flat geometry set.
-        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/zmpoints.shp");
-        ShapefileDataStore store = new ShapefileDataStore(url);
-        Query q = new Query(store.getTypeNames()[0]);
-        q.getHints().put(Hints.FEATURE_2D, Boolean.TRUE);
-        FeatureReader<SimpleFeatureType, SimpleFeature> reader =
-                store.getFeatureReader(q, Transaction.AUTO_COMMIT);
-        while (reader.hasNext()) {
-            SimpleFeature f = reader.next();
-            assertNotNull(f.getDefaultGeometry());
-        }
+        assertEquals("wrong num features", 99, readFlatFeatures("mzvalues/zmpoints.shp"));
     }
 
     @Test
     public void testReadFlatMultiPoints() throws IOException {
-        // can we read the tazmania_roads shapefile as a flat geometry set.
-        URL url = TestData.url(ShapefileDataStore.class, "mzvalues/zmmultipoints.shp");
-        ShapefileDataStore store = new ShapefileDataStore(url);
-        Query q = new Query(store.getTypeNames()[0]);
-        q.getHints().put(Hints.FEATURE_2D, Boolean.TRUE);
-        FeatureReader<SimpleFeatureType, SimpleFeature> reader =
-                store.getFeatureReader(q, Transaction.AUTO_COMMIT);
-        while (reader.hasNext()) {
-            SimpleFeature f = reader.next();
-
-            assertNotNull(f.getDefaultGeometry());
-        }
+        assertEquals("wrong num features", 2, readFlatFeatures("mzvalues/zmmultipoints.shp"));
     }
 
     @Test
